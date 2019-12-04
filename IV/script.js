@@ -2,7 +2,7 @@ window.addEventListener('load', function load(event) {
 
 	var popup = window.self;
 	popup.opener = window.self;
-	
+
 	chrome.storage.sync.get(['create'], function(display) {
 		if (!display.create) {
 			document.getElementById("IVcreate").style.display = "none";
@@ -56,9 +56,18 @@ window.addEventListener('load', function load(event) {
 	
 	
 	
-	
-	
-	
+    document.getElementById('getIntent').onclick = function() {
+        chrome.tabs.getSelected(null, function(tab) {
+        var splitUrl = tab.url.split('#');
+        if (splitUrl.length === 2) {
+            var intnetSplit = splitUrl[1].split('-');
+            document.getElementById("Intent").value = intnetSplit[0];
+            document.getElementById("Action").value = intnetSplit[1];
+        }
+    });
+    };
+
+    
     document.getElementById('IVcreate').onclick = function() {
     chrome.tabs.getSelected(null, function(tab) {
         var splitUrl = tab.url.split('#');
@@ -199,6 +208,27 @@ window.addEventListener('load', function load(event) {
                 url: myNewUrl
             });
 			popup.close();
+        }
+    });
+    };
+
+    document.getElementById('2Intent').onclick = function() {
+            chrome.tabs.getSelected(null, function(tab) {
+        //Your code below...
+        //var tabUrl = encodeURIComponent(tab.url);
+        //var tabTitle = encodeURIComponent(tab.title);
+        var splitUrl = tab.url.split('#');
+        var smanticObject = document.getElementById("Intent").value;
+        var smanticAction = document.getElementById("Action").value;
+
+        if (splitUrl.length === 2) {
+            var myNewUrl = splitUrl[0] + '#' + smanticObject + '-' + smanticAction;
+
+            //Update the url here.
+            chrome.tabs.update(tab.id, {
+                url: myNewUrl
+            });
+            popup.close();
         }
     });
     };
