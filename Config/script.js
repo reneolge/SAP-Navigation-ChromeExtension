@@ -11,7 +11,13 @@ window.addEventListener('load', function load(event) {
     
         chrome.storage.sync.get(['mWF'], function(display) {
         if (!display.mWF) {
-            document.getElementById("workflowMaintain").style.display = "none";
+            document.getElementById("IVworkflowMaintain").style.display = "none";
+        }
+    });
+    
+        chrome.storage.sync.get(['mWFPO'], function(display) {
+        if (!display.mWFPO) {
+            document.getElementById("POworkflowMaintain").style.display = "none";
         }
     });
     
@@ -31,7 +37,7 @@ window.addEventListener('load', function load(event) {
     });
     };
 
-    document.getElementById('workflowMaintain').onclick = function() {
+    document.getElementById('IVworkflowMaintain').onclick = function() {
     chrome.tabs.getSelected(null, function(tab) {
         var splitUrl = tab.url.split('#');
         if (splitUrl.length === 2) {
@@ -42,6 +48,21 @@ window.addEventListener('load', function load(event) {
                 url: myNewUrl
             });
 			popup.close();
+        }
+    });
+    };
+
+    document.getElementById('POworkflowMaintain').onclick = function() {
+    chrome.tabs.getSelected(null, function(tab) {
+        var splitUrl = tab.url.split('#');
+        if (splitUrl.length === 2) {
+            var myNewUrl = splitUrl[0] + '#PurchaseOrder-manageWorkflows';
+
+            //Update the url here.
+            chrome.tabs.update(tab.id, {
+                url: myNewUrl
+            });
+            popup.close();
         }
     });
     };

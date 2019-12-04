@@ -17,11 +17,11 @@ window.addEventListener('load', function load(event) {
 		chrome.storage.sync.get(['schedule'], function(display) {
 	document.getElementById('xIVschedule').checked = display.schedule
 	});	
-		chrome.storage.sync.get(['diplayA'], function(display) {
-	document.getElementById('xIVdisplayA').checked = display.upload
+		chrome.storage.sync.get(['displayA'], function(display) {
+	document.getElementById('xIVdisplayA').checked = display.displayA
 	});
 		chrome.storage.sync.get(['createA'], function(display) {
-	document.getElementById('xIVcreateA').checked = display.schedule
+	document.getElementById('xIVcreateA').checked = display.createA
 	});	
 	
 	
