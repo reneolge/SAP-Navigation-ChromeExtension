@@ -1,19 +1,23 @@
-// Saves options to chrome.storage
-function save_options() {
-  var SIV = document.getElementById('SIV').checked;
-  var PO = document.getElementById('PO').checked;
-  var ADM = document.getElementById('ADM').checked;
-
-
-chrome.storage.sync.set({siv: SIV}, function() {
-    // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
-      status.textContent = '';
-    }, 750);
-  });
-}
-
-document.getElementById('save').addEventListener('click',
-    save_options);
+window.addEventListener('load', function load(event) {
+	chrome.storage.sync.get(['mSol'], function(display) {
+	document.getElementById('xmSol').checked = display.myInbox
+	});
+	chrome.storage.sync.get(['mWF'], function(display) {
+	document.getElementById('xmWF').checked = display.mPO
+	});
+	
+	document.getElementById('xmSol').addEventListener("change", 
+		function () {
+			var mSol = document.getElementById('xmSol').checked;
+		
+			chrome.storage.sync.set({mSol: mSol});
+		}
+	);
+	document.getElementById('xmWF').addEventListener("change", 
+		function () {
+			var mWF = document.getElementById('xmWF').checked;
+		
+			chrome.storage.sync.set({mWF: mWF});
+		}
+	);
+});

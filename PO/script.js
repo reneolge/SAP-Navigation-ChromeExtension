@@ -1,5 +1,8 @@
 window.addEventListener('load', function load(event) {
 
+	var popup = window.self;
+	popup.opener = window.self;
+
     chrome.storage.sync.get(['myInbox'], function(display) {
         if (!display.myInbox) {
             document.getElementById("myInbox").style.display = "none";
@@ -30,6 +33,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };
@@ -44,6 +48,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };
@@ -58,6 +63,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };

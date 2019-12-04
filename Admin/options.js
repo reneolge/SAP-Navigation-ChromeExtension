@@ -1,19 +1,43 @@
-// Saves options to chrome.storage
-function save_options() {
-  var SIV = document.getElementById('SIV').checked;
-  var PO = document.getElementById('PO').checked;
-  var ADM = document.getElementById('ADM').checked;
-
-
-chrome.storage.sync.set({siv: SIV}, function() {
-    // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
-      status.textContent = '';
-    }, 750);
-  });
-}
-
-document.getElementById('save').addEventListener('click',
-    save_options);
+window.addEventListener('load', function load(event) {
+	chrome.storage.sync.get(['mBU'], function(display) {
+	document.getElementById('xmBU').checked = display.myInbox
+	});
+	chrome.storage.sync.get(['mBR'], function(display) {
+	document.getElementById('xmBR').checked = display.myInbox
+	});
+	chrome.storage.sync.get(['ImE'], function(display) {
+	document.getElementById('xImE').checked = display.myInbox
+	});
+	chrome.storage.sync.get(['CFL'], function(display) {
+	document.getElementById('xCFL').checked = display.mPO
+	});
+	
+	document.getElementById('xmBU').addEventListener("change", 
+		function () {
+			var mBU = document.getElementById('xmBU').checked;
+		
+			chrome.storage.sync.set({mBU: mBU});
+		}
+	);
+	document.getElementById('xmBR').addEventListener("change", 
+		function () {
+			var mBR = document.getElementById('xmBR').checked;
+		
+			chrome.storage.sync.set({mBR: mBR});
+		}
+	);
+	document.getElementById('xImE').addEventListener("change", 
+		function () {
+			var ImE = document.getElementById('xImE').checked;
+		
+			chrome.storage.sync.set({ImE: ImE});
+		}
+	);
+	document.getElementById('xCFL').addEventListener("change", 
+		function () {
+			var CFL = document.getElementById('xCFL').checked;
+		
+			chrome.storage.sync.set({CFL: CFL});
+		}
+	);
+});

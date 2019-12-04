@@ -1,5 +1,8 @@
 window.addEventListener('load', function load(event) {
 
+	var popup = window.self;
+	popup.opener = window.self;
+	
 	chrome.storage.sync.get(['create'], function(display) {
 		if (!display.create) {
 			document.getElementById("IVcreate").style.display = "none";
@@ -54,6 +57,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };
@@ -71,6 +75,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };
@@ -88,6 +93,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };
@@ -105,6 +111,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };
@@ -122,6 +129,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };
@@ -142,6 +150,7 @@ window.addEventListener('load', function load(event) {
             chrome.tabs.update(tab.id, {
                 url: myNewUrl
             });
+			popup.close();
         }
     });
     };
