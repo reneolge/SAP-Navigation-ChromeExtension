@@ -41,6 +41,18 @@ window.addEventListener('load', function load(event) {
 		}
 	});
 	
+		chrome.storage.sync.get(['createA'], function(display) {
+		if (!display.createA) {
+			document.getElementById("IVcreateA").style.display = "none";
+		}
+	});
+	
+		chrome.storage.sync.get(['displayA'], function(display) {
+		if (!display.displayA) {
+			document.getElementById("IVdisplayA").style.display = "none";
+		}
+	});
+	
 	
 	
 	
@@ -155,4 +167,39 @@ window.addEventListener('load', function load(event) {
     });
     };
 
+    document.getElementById('IVcreateA').onclick = function() {
+            chrome.tabs.getSelected(null, function(tab) {
+        //Your code below...
+        //var tabUrl = encodeURIComponent(tab.url);
+        //var tabTitle = encodeURIComponent(tab.title);
+        var splitUrl = tab.url.split('#');
+        if (splitUrl.length === 2) {
+            var myNewUrl = splitUrl[0] + '#SupplierInvoice-createAdvanced?sap-ui-tech-hint=GUI';
+
+            //Update the url here.
+            chrome.tabs.update(tab.id, {
+                url: myNewUrl
+            });
+			popup.close();
+        }
+    });
+    };
+
+    document.getElementById('IVdisplayA').onclick = function() {
+            chrome.tabs.getSelected(null, function(tab) {
+        //Your code below...
+        //var tabUrl = encodeURIComponent(tab.url);
+        //var tabTitle = encodeURIComponent(tab.title);
+        var splitUrl = tab.url.split('#');
+        if (splitUrl.length === 2) {
+            var myNewUrl = splitUrl[0] + '#SupplierInvoice-displayAdvanced?sap-ui-tech-hint=GUI';
+
+            //Update the url here.
+            chrome.tabs.update(tab.id, {
+                url: myNewUrl
+            });
+			popup.close();
+        }
+    });
+    };
 });

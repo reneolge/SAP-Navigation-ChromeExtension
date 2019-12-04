@@ -17,6 +17,12 @@ window.addEventListener('load', function load(event) {
 		chrome.storage.sync.get(['schedule'], function(display) {
 	document.getElementById('xIVschedule').checked = display.schedule
 	});	
+		chrome.storage.sync.get(['diplayA'], function(display) {
+	document.getElementById('xIVdisplayA').checked = display.upload
+	});
+		chrome.storage.sync.get(['createA'], function(display) {
+	document.getElementById('xIVcreateA').checked = display.schedule
+	});	
 	
 	
 	document.getElementById('xIVcreate').addEventListener("change", 
@@ -59,6 +65,20 @@ window.addEventListener('load', function load(event) {
 			var upload = document.getElementById('xIVupload').checked;
 		
 			chrome.storage.sync.set({upload: upload});
+		}
+	);
+	document.getElementById('xIVcreateA').addEventListener("change",
+		function () {
+			var creA = document.getElementById('xIVcreateA').checked;
+		
+			chrome.storage.sync.set({createA: creA});
+		}
+	);
+	document.getElementById('xIVdisplayA').addEventListener("change", 
+		function () {
+			var dspA = document.getElementById('xIVdisplayA').checked;
+		
+			chrome.storage.sync.set({displayA: dspA});
 		}
 	);
 });
