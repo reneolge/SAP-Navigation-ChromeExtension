@@ -23,6 +23,11 @@ window.addEventListener('load', function load(event) {
             document.getElementById("customFields").style.display = "none";
         }
     });
+        chrome.storage.sync.get(['WfEl'], function(display) {
+        if (!display.WfEl) {
+            document.getElementById("workflowErrorLog").style.display = "none";
+        }
+    });
     
 
 
@@ -85,6 +90,21 @@ window.addEventListener('load', function load(event) {
                 url: myNewUrl
             });
 			popup.close();
+        }
+    });
+    };
+
+    document.getElementById('workflowErrorLog').onclick = function() {
+    chrome.tabs.getSelected(null, function(tab) {
+        var splitUrl = tab.url.split('#');
+        if (splitUrl.length === 2) {
+            var myNewUrl = splitUrl[0] + '#WorkflowItem-handleApplicationErrors';
+
+            //Update the url here.
+            chrome.tabs.update(tab.id, {
+                url: myNewUrl
+            });
+            popup.close();
         }
     });
     };

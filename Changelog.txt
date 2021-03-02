@@ -1,0 +1,18 @@
+# V7
+## IV:
+- Fixed Dispay/Create Advanced Options
+## Config
+- Added "Manage PO Workflows" /changed to "Manage INV Workflows"
+
+
+# V8
+## IV:
+- Added Custom SemanticObject/Action
+
+# V9
+## IV:
+- Adjusted Year to 2020
+
+# V11
+## ADMIN:
+- Added app Workflow Application Errors
