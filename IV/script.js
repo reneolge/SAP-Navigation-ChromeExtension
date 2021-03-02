@@ -53,20 +53,7 @@ window.addEventListener('load', function load(event) {
             document.getElementById("IVchangeA").style.display = "none";
 		}
 	});
-	
-	
-	
-	
-    document.getElementById('getIntent').onclick = function() {
-        chrome.tabs.getSelected(null, function(tab) {
-        var splitUrl = tab.url.split('#');
-        if (splitUrl.length === 2) {
-            var intnetSplit = splitUrl[1].split('-');
-            document.getElementById("Intent").value = intnetSplit[0];
-            document.getElementById("Action").value = intnetSplit[1];
-        }
-    });
-    };
+
 
     document.getElementById('getDraftKey').onclick = function() {
         chrome.tabs.getSelected(null, function(tab) {
