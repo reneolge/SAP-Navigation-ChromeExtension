@@ -8,8 +8,11 @@ window.addEventListener('load', function load(event) {
 	chrome.storage.sync.get(['ImE'], function(display) {
 	document.getElementById('xImE').checked = display.ImE
 	});
-	chrome.storage.sync.get(['CFL'], function(display) {
-	document.getElementById('xCFL').checked = display.CFL
+	chrome.storage.sync.get(['CF'], function(display) {
+	document.getElementById('xCF').checked = display.CF
+	});
+	chrome.storage.sync.get(['CL'], function(display) {
+	document.getElementById('xCL').checked = display.CL
 	});
 	chrome.storage.sync.get(['WfEl'], function(display) {
 	document.getElementById('xWfEl').checked = display.WfEl
@@ -36,11 +39,18 @@ window.addEventListener('load', function load(event) {
 			chrome.storage.sync.set({ImE: ImE});
 		}
 	);
-	document.getElementById('xCFL').addEventListener("change", 
+	document.getElementById('xCF').addEventListener("change", 
 		function () {
-			var CFL = document.getElementById('xCFL').checked;
+			var CF = document.getElementById('xCF').checked;
 		
-			chrome.storage.sync.set({CFL: CFL});
+			chrome.storage.sync.set({CF: CF});
+		}
+	);
+	document.getElementById('xCL').addEventListener("change", 
+		function () {
+			var CL = document.getElementById('xCL').checked;
+		
+			chrome.storage.sync.set({CL: CL});
 		}
 	);
 	document.getElementById('xWfEl').addEventListener("change", 
