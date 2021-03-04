@@ -1,38 +1,50 @@
 <html>
-    <head>
-        <script src="script.js"></script>
-        <script id="sap-ui-bootstrap"
-            src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
-            data-sap-ui-theme="sap_belize"
-            data-sap-ui-libs="sap.m, sap.ui.layout, sap.tnt"
-            data-sap-ui-resourceroots='{"Quickstart": "./"}'
-            data-sap-ui-async="true">
+
+<head>
+    <script src="script.js"></script>
+    <script id="sap-ui-bootstrap" src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_belize" data-sap-ui-libs="sap.m, sap.ui.layout, sap.tnt"
+        data-sap-ui-resourceroots='{"Quickstart": "./"}' data-sap-ui-async="true">
         </script>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body class="sapUiBody" style="width:300px">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="sapUiBody" style="width:300px">
 
     <fieldset>
-    <legend>Supplier Invoice:</legend>
-        <input type="button" value="Create" id="IVcreate" class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input id="IVsupplierInvoice" type="text" maxlength="10" size="10"/>
-        <input id="IVfiscalYear" type="text" maxlength="4" value="2021" size="4"/>
-        <input type="button" value="DSP" id="IVdisplay" class="w3-button w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="CHG" id="IVchange" class="w3-button w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="Schedule Supplier Invoice" id="IVschedule" class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="List" id="IVlist" class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="Upload" id="IVupload" class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" /> 
-        <input type="button" value="Import" id="IVimport" class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" /> 
+        <legend>Supplier Invoice:</legend>
+        <input type="button" value="Create" id="IVcreate"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input id="IVsupplierInvoice" type="text" maxlength="10" size="10" />
+        <input id="IVfiscalYear" type="text" maxlength="4" value="2021" size="4" />
+        <input type="button" value="DSP" id="IVdisplay"
+            class="w3-button w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input type="button" value="CHG" id="IVchange"
+            class="w3-button w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input type="button" value="Schedule Supplier Invoice" id="IVschedule"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input type="button" value="List" id="IVlist"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input type="button" value="Upload" id="IVupload"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input type="button" value="Import" id="IVimport"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
     </fieldset>
-	<fieldset>
-    	<legend>Advanced:</legend>
-			<input type="button" value="Create Advanced" id="IVcreateA" class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-			<input type="button" value="Display Advanced" id="IVdisplayA" class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-    </fieldset>    
+    <fieldset>
+        <legend>Advanced:</legend>
+        <input type="button" value="Create Advanced" id="IVcreateA"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input type="button" value="Display Advanced" id="IVdisplayA"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input type="button" value="Park" id="IVpark"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+    </fieldset>
     <fieldset>
         <legend>DraftKey:</legend>
-            <input type="button" value="Copy DraftKey" id="getDraftKey" class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-            <input id="DraftKey" type="text" maxlength="255" style="display:table-cell; width:100%" readonly/>
-    </fieldset>   
-    </body>
+        <input type="button" value="Copy DraftKey" id="getDraftKey"
+            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <input id="DraftKey" type="text" maxlength="255" style="display:table-cell; width:100%" readonly />
+    </fieldset>
+</body>
+
 </html>

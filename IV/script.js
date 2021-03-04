@@ -33,14 +33,14 @@ window.addEventListener('load', function load(event) {
     var popup = window.self;
     popup.opener = window.self;
 
-    chrome.storage.sync.get(['create'], function (display) {
-        if (!display.create) {
-            document.getElementById("IVcreate").style.display = "none";
+    chrome.storage.sync.get(['create'], function (chromesettings) {
+        if (!chromesettings.create) {
+            document.getElementById("IVcreate").style.chromesettings = "none";
         }
     });
 
-    chrome.storage.sync.get(['display'], function (display) {
-        if (!display.display) {
+    chrome.storage.sync.get(['display'], function (chromesettings) {
+        if (!chromesettings.display) {
             document.getElementById("IVsupplierInvoice").style.display = "none";
             document.getElementById("IVfiscalYear").style.display = "none";
             document.getElementById("IVdisplay").style.display = "none";
@@ -48,39 +48,45 @@ window.addEventListener('load', function load(event) {
         }
     });
 
-    chrome.storage.sync.get(['import'], function (display) {
-        if (!display.import) {
+    chrome.storage.sync.get(['import'], function (chromesettings) {
+        if (!chromesettings.import) {
             document.getElementById("IVimport").style.display = "none";
         }
     });
 
-    chrome.storage.sync.get(['upload'], function (display) {
-        if (!display.upload) {
+    chrome.storage.sync.get(['upload'], function (chromesettings) {
+        if (!chromesettings.upload) {
             document.getElementById("IVupload").style.display = "none";
         }
     });
 
-    chrome.storage.sync.get(['schedule'], function (display) {
-        if (!display.schedule) {
+    chrome.storage.sync.get(['schedule'], function (chromesettings) {
+        if (!chromesettings.schedule) {
             document.getElementById("IVschedule").style.display = "none";
         }
     });
 
-    chrome.storage.sync.get(['list'], function (display) {
-        if (!display.list) {
+    chrome.storage.sync.get(['list'], function (chromesettings) {
+        if (!chromesettings.list) {
             document.getElementById("IVlist").style.display = "none";
         }
     });
 
-    chrome.storage.sync.get(['createA'], function (display) {
-        if (!display.createA) {
+    chrome.storage.sync.get(['createA'], function (chromesettings) {
+        if (!chromesettings.createA) {
             document.getElementById("IVcreateA").style.display = "none";
         }
     });
 
-    chrome.storage.sync.get(['displayA'], function (display) {
-        if (!display.displayA) {
-            document.getElementById("IVchangeA").style.display = "none";
+    chrome.storage.sync.get(['displayA'], function (chromesettings) {
+        if (!chromesettings.displayA) {
+            document.getElementById("IVdisplayA").style.display = "none";
+        }
+    });
+
+    chrome.storage.sync.get(['park'], function (chromesettings) {
+        if (!chromesettings.park) {
+            document.getElementById("IVpark").style.display = "none";
         }
     });
 
@@ -245,6 +251,24 @@ window.addEventListener('load', function load(event) {
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-displayAdvanced?sap-ui-tech-hint=GUI';
+
+                //Update the url here.
+                chrome.tabs.update(tab.id, {
+                    url: myNewUrl
+                });
+                popup.close();
+            }
+        });
+    };
+
+    document.getElementById('IVpark').onclick = function () {
+        chrome.tabs.getSelected(null, function (tab) {
+            //Your code below...
+            //var tabUrl = encodeURIComponent(tab.url);
+            //var tabTitle = encodeURIComponent(tab.title);
+            var splitUrl = tab.url.split('#');
+            if (splitUrl.length === 2) {
+                var myNewUrl = splitUrl[0] + '#SupplierInvoice-park';
 
                 //Update the url here.
                 chrome.tabs.update(tab.id, {
