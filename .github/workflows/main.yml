@@ -13,7 +13,10 @@ jobs:
       # Install Chrome
       - uses: browser-actions/setup-chrome@latest
       - run: chrome --version
-
+      
+      - name: setup Proxy
+        run: iexplore https://connectwdf.sap.com/
+      
       # Checkout Vyper
       - name: clone Vyper
         run: git clone https://${{ secrets.GITHUBTOKEN }}@github.wdf.sap.corp/sProcurement/vyperForAll.git
