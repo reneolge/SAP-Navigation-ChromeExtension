@@ -16,7 +16,9 @@ jobs:
 
       # Checkout Vyper
       - name: clone Vyper
-        run: git clone ${{ secrets.GITHUBTOKEN }}@github.wdf.sap.corp:sProcurement/vyperForAll.git
+        run: |
+         git clone git@github.wdf.sap.corp:sProcurement/vyperForAll.git
+         ${{ secrets.GITHUBTOKEN }}
 
       #Install Vyper
       - name: Install Vyper
