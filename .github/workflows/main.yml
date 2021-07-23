@@ -15,7 +15,7 @@ jobs:
       - run: chrome --version
       
       - name: setup Proxy
-        run: iexplore https://connectwdf.sap.com/
+        run: start iexplore https://connectwdf.sap.com/
       
       # Checkout Vyper
       - name: clone Vyper
