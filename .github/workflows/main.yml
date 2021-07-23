@@ -1,4 +1,4 @@
-name: Hello World
+name: Regression Tests
 
 on:
   workflow_dispatch:
@@ -7,7 +7,29 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+
+
     steps:
-     # Run Regression Tests
-      - name: Run Regression Tests
-        run: echo Hello World
+      # Install Chrome
+      - uses: browser-actions/setup-chrome@latest
+      - run: chrome --version
+
+      # Checkout Vyper
+      - name: clone Vyper
+        run: git clone ${{ secrets.GITHUBTOKEN }}@github.wdf.sap.corp:sProcurement/vyperForAll.git
+
+      #Install Vyper
+      - name: Install Vyper
+        run: |
+         cd vyperForAll
+         npm config set strict-ssl=false
+         npm config set registry=http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.milestones.npm/
+         npm config set no-proxy=nexus.wdf.sap.corp
+         npm install vyperForAll@latest -g
+         vyper webdriver-update
+         vyper execute-patches
+         cd ..
+      
+      - name: vyper version
+        run: echo vyper --version
+      
