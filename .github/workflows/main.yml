@@ -1,0 +1,13 @@
+name: Hello World
+
+on:
+  workflow_dispatch:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+     # Run Regression Tests
+      - name: Run Regression Tests
+        run: echo Hello World
