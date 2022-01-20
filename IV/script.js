@@ -25,7 +25,13 @@ function getDraftKey() {
         }
     });
 };
+
+function initializeYear() {
+    document.getElementById("IVfiscalYear").value = new Date().getFullYear();
+};
+
 document.addEventListener('DOMContentLoaded', getDraftKey, false);
+document.addEventListener('DOMContentLoaded', initializeYear, false);
 
 
 window.addEventListener('load', function load(event) {
