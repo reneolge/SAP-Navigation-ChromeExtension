@@ -26,6 +26,9 @@ window.addEventListener('load', function load(event) {
 	chrome.storage.sync.get(['park'], function (chromesettings) {
 		document.getElementById('xIVpark').checked = chromesettings.park
 	});
+	chrome.storage.sync.get(['settings'], function (chromesettings) {
+		document.getElementById('xIVsettings').checked = chromesettings.settings
+	});
 
 
 	document.getElementById('xIVcreate').addEventListener("change",
@@ -89,6 +92,13 @@ window.addEventListener('load', function load(event) {
 			var park = document.getElementById('xIVpark').checked;
 
 			chrome.storage.sync.set({ park: park });
+		}
+	);
+	document.getElementById('xIVsettings').addEventListener("change",
+		function () {
+			var settings = document.getElementById('xIVsettings').checked;
+
+			chrome.storage.sync.set({ settings: settings });
 		}
 	);
 });

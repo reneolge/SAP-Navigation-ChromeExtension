@@ -96,10 +96,15 @@ window.addEventListener('load', function load(event) {
         }
     });
 
-
     document.getElementById('getDraftKey').onclick = function () {
         copyTextToClipboard(document.getElementById("DraftKey").value);
     };
+    
+    chrome.storage.sync.get(['settings'], function (chromesettings) {
+        if (!chromesettings.settings) {
+            document.getElementById("IVsettings").style.display = "none";
+        }
+    });
 
 
     document.getElementById('IVcreate').onclick = function () {
@@ -275,6 +280,24 @@ window.addEventListener('load', function load(event) {
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-park';
+
+                //Update the url here.
+                chrome.tabs.update(tab.id, {
+                    url: myNewUrl
+                });
+                popup.close();
+            }
+        });
+    };
+
+    document.getElementById('IVsettings').onclick = function () {
+        chrome.tabs.getSelected(null, function (tab) {
+            //Your code below...
+            //var tabUrl = encodeURIComponent(tab.url);
+            //var tabTitle = encodeURIComponent(tab.title);
+            var splitUrl = tab.url.split('#');
+            if (splitUrl.length === 2) {
+                var myNewUrl = splitUrl[0] + '#SupplierInvoice-configure';
 
                 //Update the url here.
                 chrome.tabs.update(tab.id, {
