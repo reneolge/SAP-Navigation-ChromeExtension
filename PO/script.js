@@ -21,6 +21,12 @@ window.addEventListener('load', function load(event) {
         }
     });
     
+    chrome.storage.sync.get(['SESManage'], function(display) {
+    if (!display.SESManage) {
+        document.getElementById("SESManage").style.display = "none";
+    }
+});
+    
 
 
     document.getElementById('POmanage').onclick = function() {
@@ -58,6 +64,21 @@ window.addEventListener('load', function load(event) {
         var splitUrl = tab.url.split('#');
         if (splitUrl.length === 2) {
             var myNewUrl = splitUrl[0] + '#WorkflowTask-displayInbox?allItems=true';
+
+            //Update the url here.
+            chrome.tabs.update(tab.id, {
+                url: myNewUrl
+            });
+			popup.close();
+        }
+    });
+    };
+
+    document.getElementById('SESManage').onclick = function() {
+    chrome.tabs.getSelected(null, function(tab) {
+        var splitUrl = tab.url.split('#');
+        if (splitUrl.length === 2) {
+            var myNewUrl = splitUrl[0] + '#ServiceEntrySheet-manage';
 
             //Update the url here.
             chrome.tabs.update(tab.id, {
