@@ -37,7 +37,8 @@ window.addEventListener('load', function load(event) {
 
 
     document.getElementById('maintBU').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#BusinessUser-maintain';
@@ -52,7 +53,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('maintBR').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#BusinessUserRole-maintain';
@@ -67,7 +69,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('importEMP').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#HRAdministration-import';
@@ -82,7 +85,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('customFields').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#CustomField-develop';
@@ -97,7 +101,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('customLogic').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#CustomLogic-maintain';
@@ -112,7 +117,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('workflowErrorLog').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#WorkflowItem-handleApplicationErrors';

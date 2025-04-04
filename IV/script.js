@@ -9,7 +9,8 @@ function copyTextToClipboard(text) {
 }
 
 function getDraftKey() {
-    chrome.tabs.getSelected(null, function (tab) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
         if (tab.url.search("/edit/") > 0) {
             var splitUrl = tab.url.split('&/edit/');
             if (splitUrl.length === 2) {
@@ -108,7 +109,8 @@ window.addEventListener('load', function load(event) {
 
 
     document.getElementById('IVcreate').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-create';
@@ -123,7 +125,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVlist').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -141,7 +144,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVupload').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -159,7 +163,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVimport').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -177,7 +182,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVschedule').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -195,7 +201,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVdisplay').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -216,7 +223,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVchange').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -237,7 +245,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVcreateA').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -255,7 +264,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVdisplayA').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -273,7 +283,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVpark').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
@@ -291,7 +302,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVsettings').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             //Your code below...
             //var tabUrl = encodeURIComponent(tab.url);
             //var tabTitle = encodeURIComponent(tab.title);
