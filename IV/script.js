@@ -9,7 +9,8 @@ function copyTextToClipboard(text) {
 }
 
 function getDraftKey() {
-    chrome.tabs.getSelected(null, function (tab) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        var tab = tabs[0];
         if (tab.url.search("/edit/") > 0) {
             var splitUrl = tab.url.split('&/edit/');
             if (splitUrl.length === 2) {
@@ -108,7 +109,8 @@ window.addEventListener('load', function load(event) {
 
 
     document.getElementById('IVcreate').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-create';
@@ -123,10 +125,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVlist').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-list1';
@@ -141,10 +141,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVupload').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-upload';
@@ -159,10 +157,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVimport').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-import';
@@ -177,10 +173,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVschedule').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-scheduleApplicationJobsAdvanced?JobCatalogEntryName=SAP_MM_IV_STAT_OUTPUT_J%252CSAP_MM_IV_SI_OUTPUT_J%252CSAP_MM_IV_MR11_J%252CSAP_MM_IV_MRBR_J%252CSAP_MM_IV_MRKO_J%252CSAP_MM_IV_MRKON_J%252CSAP_MM_IV_MRRL_J%252CSAP_MM_IV_MRDC_J%252CSAP_MM_IV_MRNB_J%252CSAP_MM_IV_CHNGPDATE_J%252CSAP_MM_IV_MRIS_J%252CSAP_MM_IV_MRBP_J&/v4_JobRunList';
@@ -195,10 +189,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVdisplay').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var SIV = document.getElementById('IVsupplierInvoice');
@@ -216,10 +208,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVchange').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var SIV = document.getElementById('IVsupplierInvoice');
@@ -237,10 +227,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVcreateA').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-createAdvanced?sap-ui-tech-hint=GUI';
@@ -255,10 +243,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVdisplayA').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-displayAdvanced?sap-ui-tech-hint=GUI';
@@ -273,10 +259,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVpark').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-park';
@@ -291,10 +275,8 @@ window.addEventListener('load', function load(event) {
     };
 
     document.getElementById('IVsettings').onclick = function () {
-        chrome.tabs.getSelected(null, function (tab) {
-            //Your code below...
-            //var tabUrl = encodeURIComponent(tab.url);
-            //var tabTitle = encodeURIComponent(tab.title);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            var tab = tabs[0];
             var splitUrl = tab.url.split('#');
             if (splitUrl.length === 2) {
                 var myNewUrl = splitUrl[0] + '#SupplierInvoice-configure';

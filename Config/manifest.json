@@ -1,12 +1,16 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Configurations",
   "version": "1.0",
-  "description": "BPC_EXPERT",
-  "permissions": ["activeTab", "tabs", "storage"], 
-  "browser_action": {
-        "default_icon": "SAP.png",
-        "default_popup": "popup.html"
-    },
-  "options_page": "options.html"
+  "description": "CONFIGURATOR",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_icon": "SAP.png",
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
 }

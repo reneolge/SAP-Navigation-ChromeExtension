@@ -1,12 +1,16 @@
 {
-  "manifest_version": 2,
-  "name": "Invoice Apps",
+  "manifest_version": 3,
+  "name": "Invoice Verification",
   "version": "1.0",
-  "description": "AP_ACCOUNTANT",
-  "permissions": ["activeTab", "tabs", "storage"], 
-  "browser_action": {
-        "default_icon": "SAP.png",
-        "default_popup": "popup.html"
-    },
-  "options_page": "options.html"
+  "description": "INVOICE VERIFICATION",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_icon": "SAP.png",
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
 }
