@@ -4,7 +4,6 @@
   "version": "1.0",
   "description": "ADMINISTRATOR",
   "permissions": ["activeTab", "tabs", "storage"], 
-  "content_security_policy":"script-src 'self' https://openui5.hana.ondemand.com; object-src 'self'",
   "browser_action": {
         "default_icon": "SAP.png",
         "default_popup": "popup.html"
