@@ -1,292 +1,263 @@
-// Copy provided text to the clipboard.
-function copyTextToClipboard(text) {
-    var copyFrom = $('<textarea/>');
-    copyFrom.text(text);
-    $('body').append(copyFrom);
-    copyFrom.select();
-    document.execCommand('copy');
-    copyFrom.remove();
+/**
+ * SAP Invoice Verification Chrome Extension
+ * Utility functions and event handlers
+ */
+
+// Constants
+const SETTINGS = [
+    'create', 'display', 'import', 'upload', 'schedule', 
+    'list', 'createA', 'displayA', 'park', 'settings'
+];
+
+const URL_MAPPINGS = {
+    create: '#SupplierInvoice-create',
+    list: '#SupplierInvoice-list1',
+    upload: '#SupplierInvoice-upload',
+    import: '#SupplierInvoice-import',
+    schedule: '#SupplierInvoice-scheduleApplicationJobsAdvanced?JobCatalogEntryName=SAP_MM_IV_STAT_OUTPUT_J%252CSAP_MM_IV_SI_OUTPUT_J%252CSAP_MM_IV_MR11_J%252CSAP_MM_IV_MRBR_J%252CSAP_MM_IV_MRKO_J%252CSAP_MM_IV_MRKON_J%252CSAP_MM_IV_MRRL_J%252CSAP_MM_IV_MRDC_J%252CSAP_MM_IV_MRNB_J%252CSAP_MM_IV_CHNGPDATE_J%252CSAP_MM_IV_MRIS_J%252CSAP_MM_IV_MRBP_J&/v4_JobRunList',
+    createA: '#SupplierInvoice-createAdvanced?sap-ui-tech-hint=GUI',
+    displayA: '#SupplierInvoice-displayAdvanced?sap-ui-tech-hint=GUI',
+    park: '#SupplierInvoice-park',
+    settings: '#SupplierInvoice-configure'
+};
+
+/**
+ * Utility Functions
+ */
+
+/**
+ * Copy text to clipboard using modern Clipboard API
+ * @param {string} text - The text to copy
+ */
+async function copyTextToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+    } catch (err) {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
 }
 
-function getDraftKey() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        var tab = tabs[0];
-        if (tab.url.search("/edit/") > 0) {
-            var splitUrl = tab.url.split('&/edit/');
-            if (splitUrl.length === 2) {
-                var intnetSplit = splitUrl[1].split('-');
-                document.getElementById("DraftKey").value = intnetSplit[0] + intnetSplit[1] + intnetSplit[2] + intnetSplit[3] + intnetSplit[4]
-            }
-        } else if (tab.url.search("/create/") > 0) {
-            var splitUrl = tab.url.split('#SupplierInvoice-create&/create/isSharedDraft=false/');
-            if (splitUrl.length === 2) {
-                var intnetSplit = splitUrl[1].split('-');
-                document.getElementById("DraftKey").value = intnetSplit[0] + intnetSplit[1] + intnetSplit[2] + intnetSplit[3] + intnetSplit[4]
-            }
-        }
+/**
+ * Get current active tab
+ * @returns {Promise<chrome.tabs.Tab>} The active tab
+ */
+function getCurrentTab() {
+    return new Promise((resolve) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            resolve(tabs[0]);
+        });
     });
-};
+}
 
-function initializeYear() {
-    document.getElementById("IVfiscalYear").value = new Date().getFullYear();
-};
+/**
+ * Update tab URL
+ * @param {number} tabId - The tab ID
+ * @param {string} url - The new URL
+ */
+function updateTabUrl(tabId, url) {
+    chrome.tabs.update(tabId, { url });
+    window.close();
+}
 
-document.addEventListener('DOMContentLoaded', getDraftKey, false);
-document.addEventListener('DOMContentLoaded', initializeYear, false);
-
-
-window.addEventListener('load', function load(event) {
-
-    var popup = window.self;
-    popup.opener = window.self;
-
-    chrome.storage.sync.get(['create'], function (chromesettings) {
-        if (!chromesettings.create) {
-            document.getElementById("IVcreate").style.chromesettings = "none";
+/**
+ * Extract draft key from URL
+ * @param {string} url - The current tab URL
+ * @returns {string} The draft key or empty string
+ */
+function extractDraftKey(url) {
+    if (url.includes('/edit/')) {
+        const editPart = url.split('&/edit/')[1];
+        if (editPart) {
+            const parts = editPart.split('-');
+            return parts.slice(0, 5).join('');
         }
-    });
-
-    chrome.storage.sync.get(['display'], function (chromesettings) {
-        if (!chromesettings.display) {
-            document.getElementById("IVsupplierInvoice").style.display = "none";
-            document.getElementById("IVfiscalYear").style.display = "none";
-            document.getElementById("IVdisplay").style.display = "none";
-            document.getElementById("IVchange").style.display = "none";
+    } else if (url.includes('/create/')) {
+        const createPart = url.split('#SupplierInvoice-create&/create/isSharedDraft=false/')[1];
+        if (createPart) {
+            const parts = createPart.split('-');
+            return parts.slice(0, 5).join('');
         }
-    });
+    }
+    return '';
+}
 
-    chrome.storage.sync.get(['import'], function (chromesettings) {
-        if (!chromesettings.import) {
-            document.getElementById("IVimport").style.display = "none";
-        }
-    });
+/**
+ * Initialize draft key field
+ */
+async function initializeDraftKey() {
+    const tab = await getCurrentTab();
+    const draftKey = extractDraftKey(tab.url);
+    const draftKeyInput = document.getElementById('DraftKey');
+    if (draftKeyInput) {
+        draftKeyInput.value = draftKey;
+    }
+}
 
-    chrome.storage.sync.get(['upload'], function (chromesettings) {
-        if (!chromesettings.upload) {
-            document.getElementById("IVupload").style.display = "none";
-        }
-    });
+/**
+ * Initialize fiscal year with current year
+ */
+function initializeFiscalYear() {
+    const fiscalYearInput = document.getElementById('IVfiscalYear');
+    if (fiscalYearInput) {
+        fiscalYearInput.value = new Date().getFullYear();
+    }
+}
 
-    chrome.storage.sync.get(['schedule'], function (chromesettings) {
-        if (!chromesettings.schedule) {
-            document.getElementById("IVschedule").style.display = "none";
-        }
-    });
+/**
+ * Initialize page on DOM load
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    initializeDraftKey();
+    initializeFiscalYear();
+});
 
-    chrome.storage.sync.get(['list'], function (chromesettings) {
-        if (!chromesettings.list) {
-            document.getElementById("IVlist").style.display = "none";
-        }
-    });
 
-    chrome.storage.sync.get(['createA'], function (chromesettings) {
-        if (!chromesettings.createA) {
-            document.getElementById("IVcreateA").style.display = "none";
-        }
-    });
+/**
+ * Settings and UI Management
+ */
 
-    chrome.storage.sync.get(['displayA'], function (chromesettings) {
-        if (!chromesettings.displayA) {
-            document.getElementById("IVdisplayA").style.display = "none";
-        }
+/**
+ * Load and apply visibility settings from storage
+ */
+async function loadSettings() {
+    return new Promise((resolve) => {
+        chrome.storage.sync.get(SETTINGS, (settings) => {
+            resolve(settings);
+        });
     });
+}
 
-    chrome.storage.sync.get(['park'], function (chromesettings) {
-        if (!chromesettings.park) {
-            document.getElementById("IVpark").style.display = "none";
-        }
-    });
+/**
+ * Apply visibility settings to UI elements
+ * @param {Object} settings - Settings object
+ */
+function applyVisibilitySettings(settings) {
+    // Handle display setting - affects multiple elements
+    if (settings.display === false) {
+        const displayElements = ['IVsupplierInvoice', 'IVfiscalYear', 'IVdisplay', 'IVchange'];
+        displayElements.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) element.style.display = 'none';
+        });
+    }
 
-    document.getElementById('getDraftKey').onclick = function () {
-        copyTextToClipboard(document.getElementById("DraftKey").value);
+    // Handle individual settings
+    const settingsMap = {
+        create: 'IVcreate',
+        import: 'IVimport',
+        upload: 'IVupload',
+        schedule: 'IVschedule',
+        list: 'IVlist',
+        createA: 'IVcreateA',
+        displayA: 'IVdisplayA',
+        park: 'IVpark',
+        settings: 'IVsettings'
     };
+
+    Object.entries(settingsMap).forEach(([setting, elementId]) => {
+        if (settings[setting] === false) {
+            const element = document.getElementById(elementId);
+            if (element) element.style.display = 'none';
+        }
+    });
+}
+
+/**
+ * Navigation Handler
+ */
+
+/**
+ * Navigate to a specific SAP page
+ * @param {string} action - The action key from URL_MAPPINGS
+ * @param {Object} params - Optional parameters (e.g., supplierInvoice, fiscalYear)
+ */
+async function navigateToSAPPage(action, params = {}) {
+    const tab = await getCurrentTab();
+    const [baseUrl] = tab.url.split('#');
     
-    chrome.storage.sync.get(['settings'], function (chromesettings) {
-        if (!chromesettings.settings) {
-            document.getElementById("IVsettings").style.display = "none";
+    if (!baseUrl) return;
+
+    let targetUrl = URL_MAPPINGS[action];
+    
+    // Handle display and change actions with parameters
+    if (action === 'display' && params.supplierInvoice && params.fiscalYear) {
+        targetUrl = `#SupplierInvoice-process?SupplierInvoice=${params.supplierInvoice}&FiscalYear=${params.fiscalYear}&/display`;
+    } else if (action === 'change' && params.supplierInvoice && params.fiscalYear) {
+        targetUrl = `#SupplierInvoice-change?SupplierInvoice=${params.supplierInvoice}&FiscalYear=${params.fiscalYear}`;
+    }
+
+    updateTabUrl(tab.id, baseUrl + targetUrl);
+}
+
+/**
+ * Event Handlers Setup
+ */
+function setupEventHandlers() {
+    // Copy draft key button
+    const getDraftKeyBtn = document.getElementById('getDraftKey');
+    if (getDraftKeyBtn) {
+        getDraftKeyBtn.addEventListener('click', () => {
+            const draftKey = document.getElementById('DraftKey')?.value;
+            if (draftKey) {
+                copyTextToClipboard(draftKey);
+            }
+        });
+    }
+
+    // Simple navigation buttons
+    const simpleButtons = [
+        { id: 'IVcreate', action: 'create' },
+        { id: 'IVlist', action: 'list' },
+        { id: 'IVupload', action: 'upload' },
+        { id: 'IVimport', action: 'import' },
+        { id: 'IVschedule', action: 'schedule' },
+        { id: 'IVcreateA', action: 'createA' },
+        { id: 'IVdisplayA', action: 'displayA' },
+        { id: 'IVpark', action: 'park' },
+        { id: 'IVsettings', action: 'settings' }
+    ];
+
+    simpleButtons.forEach(({ id, action }) => {
+        const button = document.getElementById(id);
+        if (button) {
+            button.addEventListener('click', () => navigateToSAPPage(action));
         }
     });
 
-
-    document.getElementById('IVcreate').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-create';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
+    // Display button with parameters
+    const displayBtn = document.getElementById('IVdisplay');
+    if (displayBtn) {
+        displayBtn.addEventListener('click', () => {
+            const supplierInvoice = document.getElementById('IVsupplierInvoice')?.value;
+            const fiscalYear = document.getElementById('IVfiscalYear')?.value;
+            navigateToSAPPage('display', { supplierInvoice, fiscalYear });
         });
-    };
+    }
 
-    document.getElementById('IVlist').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-list1';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
+    // Change button with parameters
+    const changeBtn = document.getElementById('IVchange');
+    if (changeBtn) {
+        changeBtn.addEventListener('click', () => {
+            const supplierInvoice = document.getElementById('IVsupplierInvoice')?.value;
+            const fiscalYear = document.getElementById('IVfiscalYear')?.value;
+            navigateToSAPPage('change', { supplierInvoice, fiscalYear });
         });
-    };
+    }
+}
 
-    document.getElementById('IVupload').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-upload';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
-
-    document.getElementById('IVimport').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-import';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
-
-    document.getElementById('IVschedule').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-scheduleApplicationJobsAdvanced?JobCatalogEntryName=SAP_MM_IV_STAT_OUTPUT_J%252CSAP_MM_IV_SI_OUTPUT_J%252CSAP_MM_IV_MR11_J%252CSAP_MM_IV_MRBR_J%252CSAP_MM_IV_MRKO_J%252CSAP_MM_IV_MRKON_J%252CSAP_MM_IV_MRRL_J%252CSAP_MM_IV_MRDC_J%252CSAP_MM_IV_MRNB_J%252CSAP_MM_IV_CHNGPDATE_J%252CSAP_MM_IV_MRIS_J%252CSAP_MM_IV_MRBP_J&/v4_JobRunList';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
-
-    document.getElementById('IVdisplay').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var SIV = document.getElementById('IVsupplierInvoice');
-                var FY = document.getElementById('IVfiscalYear');
-
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-process?SupplierInvoice=' + SIV.value + '&FiscalYear=' + FY.value + '&/display';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
-
-    document.getElementById('IVchange').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var SIV = document.getElementById('IVsupplierInvoice');
-                var FY = document.getElementById('IVfiscalYear');
-
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-change?SupplierInvoice=' + SIV.value + '&FiscalYear=' + FY.value;
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
-
-    document.getElementById('IVcreateA').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-createAdvanced?sap-ui-tech-hint=GUI';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
-
-    document.getElementById('IVdisplayA').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-displayAdvanced?sap-ui-tech-hint=GUI';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
-
-    document.getElementById('IVpark').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-park';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
-
-    document.getElementById('IVsettings').onclick = function () {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            var tab = tabs[0];
-            var splitUrl = tab.url.split('#');
-            if (splitUrl.length === 2) {
-                var myNewUrl = splitUrl[0] + '#SupplierInvoice-configure';
-
-                //Update the url here.
-                chrome.tabs.update(tab.id, {
-                    url: myNewUrl
-                });
-                popup.close();
-            }
-        });
-    };
+/**
+ * Initialize extension on window load
+ */
+window.addEventListener('load', async () => {
+    const settings = await loadSettings();
+    applyVisibilitySettings(settings);
+    setupEventHandlers();
 });

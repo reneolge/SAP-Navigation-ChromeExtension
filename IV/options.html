@@ -2,55 +2,115 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Options</title>
-  <script src="options.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Verification Settings</title>
+    <script src="options.js" defer></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
+        }
+
+        .settings-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        label:hover {
+            background-color: #f0f0f0;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .setting-label {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 
 <body>
 
-  <h1>Show Links to:</h1>
-  <label>
-    <input type="checkbox" id="xIVcreate">
-    Create Supplier Invoice.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVdisplay">
-    Display Supplier Invoice.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVschedule">
-    Schedule Supplier Invoice.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVlist">
-    Supplier Invoice List.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVupload">
-    Upload Supplier Invoice.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVimport">
-    Import Supplier Invoice.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVcreateA">
-    Create Supplier Invoice - Advanced.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVdisplayA">
-    Display Supplier Invoice - Advanced.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVpark">
-    Park Supplier Invoice.
-  </label><br>
-  <label>
-    <input type="checkbox" id="xIVsettings">
-    Supplier Invoice Settings.
-  </label><br>
+    <h1>Invoice Verification Settings</h1>
+    <p>Select which features to display in the extension popup:</p>
+
+    <div class="settings-container">
+        <label>
+            <input type="checkbox" id="xIVcreate">
+            <span class="setting-label">Create Supplier Invoice</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVdisplay">
+            <span class="setting-label">Display Supplier Invoice</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVschedule">
+            <span class="setting-label">Schedule Supplier Invoice</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVlist">
+            <span class="setting-label">Supplier Invoice List</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVupload">
+            <span class="setting-label">Upload Supplier Invoice</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVimport">
+            <span class="setting-label">Import Supplier Invoice</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVcreateA">
+            <span class="setting-label">Create Supplier Invoice - Advanced</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVdisplayA">
+            <span class="setting-label">Display Supplier Invoice - Advanced</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVpark">
+            <span class="setting-label">Park Supplier Invoice</span>
+        </label>
+
+        <label>
+            <input type="checkbox" id="xIVsettings">
+            <span class="setting-label">Supplier Invoice Settings</span>
+        </label>
+    </div>
+
 </body>
 
 </html>

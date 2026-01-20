@@ -1,50 +1,127 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <script src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Verification</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 
-<body class="sapUiBody" style="width:300px">
+<body class="sapUiBody" style="width: 300px;">
 
     <fieldset>
-        <legend>Supplier Invoice:</legend>
-        <input type="button" value="Create" id="IVcreate"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input id="IVsupplierInvoice" type="text" maxlength="10" size="10" />
-        <input id="IVfiscalYear" type="text" maxlength="4" size="4" />
-        <input type="button" value="DSP" id="IVdisplay"
-            class="w3-button w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="CHG" id="IVchange"
-            class="w3-button w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="Schedule Supplier Invoice" id="IVschedule"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="List" id="IVlist"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="Upload" id="IVupload"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="Import" id="IVimport"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <legend>Supplier Invoice</legend>
+        
+        <button type="button" id="IVcreate" 
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Create Supplier Invoice">
+            Create
+        </button>
+        
+        <div style="display: flex; gap: 4px; margin: 4px 0;">
+            <input id="IVsupplierInvoice" 
+                   type="text" 
+                   maxlength="10" 
+                   placeholder="Invoice #"
+                   aria-label="Supplier Invoice Number"
+                   style="flex: 1;">
+            <input id="IVfiscalYear" 
+                   type="text" 
+                   maxlength="4" 
+                   placeholder="Year"
+                   aria-label="Fiscal Year"
+                   style="width: 60px;">
+        </div>
+        
+        <div style="display: flex; gap: 4px;">
+            <button type="button" id="IVdisplay"
+                    class="w3-button w3-border w3-pale-yellow w3-padding-small w3-small"
+                    style="flex: 1;"
+                    aria-label="Display Supplier Invoice">
+                DSP
+            </button>
+            <button type="button" id="IVchange"
+                    class="w3-button w3-border w3-pale-yellow w3-padding-small w3-small"
+                    style="flex: 1;"
+                    aria-label="Change Supplier Invoice">
+                CHG
+            </button>
+        </div>
+        
+        <button type="button" id="IVschedule"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Schedule Supplier Invoice">
+            Schedule Supplier Invoice
+        </button>
+        
+        <button type="button" id="IVlist"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="List Supplier Invoices">
+            List
+        </button>
+        
+        <button type="button" id="IVupload"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Upload Supplier Invoice">
+            Upload
+        </button>
+        
+        <button type="button" id="IVimport"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Import Supplier Invoice">
+            Import
+        </button>
     </fieldset>
+
     <fieldset>
-        <legend>Advanced:</legend>
-        <input type="button" value="Create Advanced" id="IVcreateA"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="Display Advanced" id="IVdisplayA"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input type="button" value="Park" id="IVpark"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <legend>Advanced</legend>
+        
+        <button type="button" id="IVcreateA"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Create Advanced Supplier Invoice">
+            Create Advanced
+        </button>
+        
+        <button type="button" id="IVdisplayA"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Display Advanced Supplier Invoice">
+            Display Advanced
+        </button>
+        
+        <button type="button" id="IVpark"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Park Supplier Invoice">
+            Park
+        </button>
     </fieldset>
+
     <fieldset>
-        <legend>DraftKey:</legend>
-        <input type="button" value="Copy DraftKey" id="getDraftKey"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
-        <input id="DraftKey" type="text" maxlength="255" style="display:table-cell; width:100%" readonly />
+        <legend>Draft Key</legend>
+        
+        <button type="button" id="getDraftKey"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Copy Draft Key to Clipboard">
+            Copy Draft Key
+        </button>
+        
+        <input id="DraftKey" 
+               type="text" 
+               maxlength="255" 
+               readonly
+               aria-label="Draft Key"
+               style="display: table-cell; width: 100%; margin-top: 4px;">
     </fieldset>
+
     <fieldset>
-        <input type="button" value="Supplier Invoice Settings" id="IVsettings"
-            class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small" />
+        <button type="button" id="IVsettings"
+                class="w3-button w3-block w3-border w3-pale-yellow w3-padding-small w3-small"
+                aria-label="Open Supplier Invoice Settings">
+            Supplier Invoice Settings
+        </button>
     </fieldset>
+
 </body>
 
 </html>
