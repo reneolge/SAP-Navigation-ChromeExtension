@@ -1,40 +1,79 @@
-window.addEventListener('load', function load(event) {
-	const settings = ['myInbox', 'mPO', 'GRforPO', 'SESManage'];
+/**
+ * SAP Purchase Orders Chrome Extension - Options Page
+ * Handles settings management and default configuration.
+ */
 
-	settings.forEach(setting => {
-		chrome.storage.sync.get([setting], function (display) {
-			document.getElementById(`x${setting}`).checked = display[setting];
-		});
+// Checkbox ids are the storage key prefixed with this string (e.g. mPO -> xmPO)
+const CHECKBOX_PREFIX = 'x';
 
-		document.getElementById(`x${setting}`).addEventListener("change", function () {
-			const isChecked = document.getElementById(`x${setting}`).checked;
-			chrome.storage.sync.set({ [setting]: isChecked });
-		});
-	});
-});
+// Settings configuration (key = storage key, label = documentation only)
+const SETTINGS_CONFIG = [
+    { key: 'myInbox', label: 'My Inbox' },
+    { key: 'mPO', label: 'Manage Purchase Orders' },
+    { key: 'GRforPO', label: 'Post Goods Receipt for Purchase Order' },
+    { key: 'SESManage', label: 'Manage Service Entry Sheet (Lean Service)' }
+];
 
-// Ensure all options are selected by default
-document.addEventListener('DOMContentLoaded', () => {
-    const defaultOptions = {
-        option1: true,
-        option2: true,
-        option3: true,
-        // Add all other options here
-    };
-
-    chrome.storage.sync.get(defaultOptions, (storedOptions) => {
-        // Merge stored options with defaults
-        const options = { ...defaultOptions, ...storedOptions };
-
-        // Update UI to reflect the options
-        for (const [key, value] of Object.entries(options)) {
-            const checkbox = document.querySelector(`#${key}`);
-            if (checkbox) {
-                checkbox.checked = value;
-            }
-        }
-
-        // Save the default options if not already set
-        chrome.storage.sync.set(options);
+/**
+ * Build the default settings object (everything enabled)
+ * @returns {Object} Default settings object
+ */
+function getDefaultSettings() {
+    const defaults = {};
+    SETTINGS_CONFIG.forEach(({ key }) => {
+        defaults[key] = true;
     });
-});
+    return defaults;
+}
+
+/**
+ * Load settings from Chrome storage, falling back to defaults
+ * @returns {Promise<Object>} Settings object
+ */
+function loadSettings() {
+    return new Promise((resolve) => {
+        chrome.storage.sync.get(getDefaultSettings(), (settings) => {
+            resolve(settings);
+        });
+    });
+}
+
+/**
+ * Save a single setting to Chrome storage
+ * @param {string} key - Setting key
+ * @param {boolean} value - Setting value
+ */
+function saveSetting(key, value) {
+    chrome.storage.sync.set({ [key]: value });
+}
+
+/**
+ * Initialize settings UI
+ * @param {Object} settings - Current settings
+ */
+function initializeUI(settings) {
+    SETTINGS_CONFIG.forEach(({ key }) => {
+        const checkbox = document.getElementById(`${CHECKBOX_PREFIX}${key}`);
+        if (checkbox) {
+            checkbox.checked = settings[key] !== false;
+
+            checkbox.addEventListener('change', () => {
+                saveSetting(key, checkbox.checked);
+            });
+        }
+    });
+}
+
+/**
+ * Initialize options page
+ */
+async function initialize() {
+    const settings = await loadSettings();
+
+    // Persist defaults on first run
+    chrome.storage.sync.set(settings);
+
+    initializeUI(settings);
+}
+
+document.addEventListener('DOMContentLoaded', initialize);

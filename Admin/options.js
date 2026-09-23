@@ -1,40 +1,81 @@
-window.addEventListener('load', function load(event) {
-    const settings = ['mBU', 'mBR', 'ImE', 'CF', 'CL', 'WfEl'];
+/**
+ * SAP Administrations Chrome Extension - Options Page
+ * Handles settings management and default configuration.
+ */
 
-    settings.forEach(setting => {
-        chrome.storage.sync.get([setting], function(display) {
-            document.getElementById(`x${setting}`).checked = display[setting];
-        });
+// Checkbox ids are the storage key prefixed with this string (e.g. mBU -> xmBU)
+const CHECKBOX_PREFIX = 'x';
 
-        document.getElementById(`x${setting}`).addEventListener("change", function () {
-            const value = document.getElementById(`x${setting}`).checked;
-            chrome.storage.sync.set({[setting]: value});
+// Settings configuration (key = storage key, label = documentation only)
+const SETTINGS_CONFIG = [
+    { key: 'mBU', label: 'Maintain Business User' },
+    { key: 'mBR', label: 'Maintain Business Roles' },
+    { key: 'ImE', label: 'Import Employee' },
+    { key: 'CF', label: 'Custom Fields' },
+    { key: 'CL', label: 'Custom Logic' },
+    { key: 'WfEl', label: 'Workflow Application Errors' }
+];
+
+/**
+ * Build the default settings object (everything enabled)
+ * @returns {Object} Default settings object
+ */
+function getDefaultSettings() {
+    const defaults = {};
+    SETTINGS_CONFIG.forEach(({ key }) => {
+        defaults[key] = true;
+    });
+    return defaults;
+}
+
+/**
+ * Load settings from Chrome storage, falling back to defaults
+ * @returns {Promise<Object>} Settings object
+ */
+function loadSettings() {
+    return new Promise((resolve) => {
+        chrome.storage.sync.get(getDefaultSettings(), (settings) => {
+            resolve(settings);
         });
     });
-});
+}
 
-// Ensure all options are selected by default
-document.addEventListener('DOMContentLoaded', () => {
-    const defaultOptions = {
-        option1: true,
-        option2: true,
-        option3: true,
-        // Add all other options here
-    };
+/**
+ * Save a single setting to Chrome storage
+ * @param {string} key - Setting key
+ * @param {boolean} value - Setting value
+ */
+function saveSetting(key, value) {
+    chrome.storage.sync.set({ [key]: value });
+}
 
-    chrome.storage.sync.get(defaultOptions, (storedOptions) => {
-        // Merge stored options with defaults
-        const options = { ...defaultOptions, ...storedOptions };
+/**
+ * Initialize settings UI
+ * @param {Object} settings - Current settings
+ */
+function initializeUI(settings) {
+    SETTINGS_CONFIG.forEach(({ key }) => {
+        const checkbox = document.getElementById(`${CHECKBOX_PREFIX}${key}`);
+        if (checkbox) {
+            checkbox.checked = settings[key] !== false;
 
-        // Update UI to reflect the options
-        for (const [key, value] of Object.entries(options)) {
-            const checkbox = document.querySelector(`#${key}`);
-            if (checkbox) {
-                checkbox.checked = value;
-            }
+            checkbox.addEventListener('change', () => {
+                saveSetting(key, checkbox.checked);
+            });
         }
-
-        // Save the default options if not already set
-        chrome.storage.sync.set(options);
     });
-});
+}
+
+/**
+ * Initialize options page
+ */
+async function initialize() {
+    const settings = await loadSettings();
+
+    // Persist defaults on first run
+    chrome.storage.sync.set(settings);
+
+    initializeUI(settings);
+}
+
+document.addEventListener('DOMContentLoaded', initialize);

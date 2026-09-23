@@ -14,7 +14,8 @@ const SETTINGS_CONFIG = [
     { key: 'displayA', label: 'Display Supplier Invoice - Advanced' },
     { key: 'createA', label: 'Create Supplier Invoice - Advanced' },
     { key: 'park', label: 'Park Supplier Invoice' },
-    { key: 'settings', label: 'Supplier Invoice Settings' }
+    { key: 'settings', label: 'Supplier Invoice Settings' },
+    { key: 'batchInspector', label: 'Batch Inspector' }
 ];
 
 /**
