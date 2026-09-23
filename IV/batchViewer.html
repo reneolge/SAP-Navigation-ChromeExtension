@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Invoice - Batch Inspector</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+            color: #333;
+        }
+
+        header .spacer {
+            flex: 1;
+        }
+
+        button {
+            font: inherit;
+            padding: 6px 12px;
+            border: 1px solid #007acc;
+            background: #007acc;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button.secondary {
+            background: #fff;
+            color: #007acc;
+        }
+
+        button.mini {
+            font-size: 11px;
+            padding: 2px 8px;
+        }
+
+        button.danger {
+            background: #fff;
+            color: #b00020;
+            border-color: #b00020;
+        }
+
+        #main {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+        }
+
+        #list {
+            width: 360px;
+            min-width: 260px;
+            max-width: 50%;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+            background: #fff;
+        }
+
+        .item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .item:hover {
+            background: #f0f7ff;
+        }
+
+        .item.active {
+            background: #e3f0ff;
+        }
+
+        .item .row1 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .method {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 3px;
+            color: #fff;
+        }
+
+        .method.GET { background: #2e7d32; }
+        .method.POST { background: #1565c0; }
+        .method.PUT, .method.MERGE, .method.PATCH { background: #ef6c00; }
+        .method.DELETE { background: #b00020; }
+
+        .item .label {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .item .key {
+            font-size: 11px;
+            color: #666;
+            word-break: break-all;
+            margin-top: 2px;
+        }
+
+        .item .meta {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .badge-status {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-status.ok { color: #2e7d32; }
+        .badge-status.err { color: #b00020; }
+
+        #detail {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        #detail h2 {
+            font-size: 15px;
+            margin: 0 0 4px;
+            word-break: break-all;
+        }
+
+        #detail .subtle {
+            color: #666;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        section.block {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        section.block h3 {
+            margin: 0 0 8px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #555;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12.5px;
+            line-height: 1.45;
+        }
+
+        .empty {
+            color: #999;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .sap-msg {
+            border-left: 4px solid #ef6c00;
+            background: #fff8e1;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12.5px;
+        }
+
+        .sap-msg.error { border-left-color: #b00020; background: #fdecef; }
+        .sap-msg.warning { border-left-color: #ef6c00; background: #fff8e1; }
+        .sap-msg.info { border-left-color: #1565c0; background: #e8f2fe; }
+        .sap-msg .detail-line { margin-top: 4px; color: #444; }
+
+        /* JSON syntax highlight */
+        .json-key { color: #7b1fa2; }
+        .json-string { color: #2e7d32; }
+        .json-number { color: #1565c0; }
+        .json-boolean { color: #ef6c00; }
+        .json-null { color: #b00020; }
+        .json-punct { color: #555; }
+
+        /* Collapsible JSON tree */
+        .json-tree {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12.5px;
+            line-height: 1.5;
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+
+        .jn-header {
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .jn-header:hover {
+            background: #f0f7ff;
+        }
+
+        .jn-toggle {
+            display: inline-block;
+            width: 14px;
+            text-align: center;
+            color: #888;
+            user-select: none;
+        }
+
+        .jn-children {
+            padding-left: 16px;
+            border-left: 1px dotted #d0d0d0;
+        }
+
+        .jn-close {
+            padding-left: 14px;
+        }
+
+        .jn-summary {
+            color: #999;
+            font-style: italic;
+        }
+
+        .block-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .block-head h3 {
+            margin: 0;
+        }
+
+        .tree-controls {
+            margin-left: auto;
+            display: flex;
+            gap: 6px;
+        }
+    </style>
+    <script src="batchParser.js"></script>
+    <script src="batchViewer.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Supplier Invoice · Batch Inspector</h1>
+        <span class="spacer"></span>
+        <span id="count" class="subtle"></span>
+        <button id="refresh" class="secondary">Refresh</button>
+        <button id="clear" class="danger">Clear all</button>
+    </header>
+
+    <div id="main">
+        <div id="list"></div>
+        <div id="detail">
+            <div class="empty">Select a request on the left to see its response.</div>
+        </div>
+    </div>
+</body>
+
+</html>

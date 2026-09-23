@@ -6,7 +6,7 @@
 // Constants
 const SETTINGS = [
     'create', 'display', 'import', 'upload', 'schedule', 
-    'list', 'createA', 'displayA', 'park', 'settings'
+    'list', 'createA', 'displayA', 'park', 'settings', 'batchInspector'
 ];
 
 const URL_MAPPINGS = {
@@ -168,6 +168,12 @@ function applyVisibilitySettings(settings) {
             if (element) element.style.display = 'none';
         }
     });
+
+    // Batch Inspector is a single fieldset section
+    if (settings.batchInspector === false) {
+        const section = document.getElementById('IVbatchSection');
+        if (section) section.style.display = 'none';
+    }
 }
 
 /**
@@ -254,10 +260,66 @@ function setupEventHandlers() {
 }
 
 /**
+ * Batch Inspector: record toggle + open viewer
+ */
+function setupBatchInspector() {
+    const recordBtn = document.getElementById('IVbatchRecord');
+    const openBtn = document.getElementById('IVbatchOpen');
+
+    if (openBtn) {
+        openBtn.addEventListener('click', () => {
+            chrome.tabs.create({ url: chrome.runtime.getURL('batchViewer.html') });
+        });
+    }
+
+    if (!recordBtn) return;
+
+    const render = (state) => {
+        const active = !!(state && state.active);
+        recordBtn.textContent = active ? '■ Stop Recording' : '● Start Recording';
+        recordBtn.classList.toggle('w3-pale-red', active);
+        recordBtn.classList.toggle('w3-pale-yellow', !active);
+    };
+
+    const getState = () => new Promise((resolve) => {
+        chrome.runtime.sendMessage({ type: 'GET_STATE' }, (state) => {
+            resolve(chrome.runtime.lastError ? { active: false } : (state || { active: false }));
+        });
+    });
+
+    getState().then(render);
+
+    recordBtn.addEventListener('click', async () => {
+        const current = await getState();
+
+        if (current.active) {
+            chrome.runtime.sendMessage({ type: 'STOP_RECORDING' }, () => render({ active: false }));
+            return;
+        }
+
+        const tab = await getCurrentTab();
+        recordBtn.disabled = true;
+        chrome.runtime.sendMessage({ type: 'START_RECORDING', tabId: tab && tab.id }, (res) => {
+            recordBtn.disabled = false;
+            if (chrome.runtime.lastError || !res || !res.ok) {
+                const msg = (res && res.error) ||
+                    (chrome.runtime.lastError && chrome.runtime.lastError.message) ||
+                    'Could not start recording.';
+                alert('Batch recording could not start:\n' + msg);
+                render({ active: false });
+                return;
+            }
+            render({ active: true });
+        });
+    });
+}
+
+/**
  * Initialize extension on window load
  */
 window.addEventListener('load', async () => {
     const settings = await loadSettings();
     applyVisibilitySettings(settings);
     setupEventHandlers();
+    setupBatchInspector();
 });

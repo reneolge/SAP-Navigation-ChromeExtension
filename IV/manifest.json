@@ -1,10 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Invoice Verification",
-  "version": "1.0",
+  "version": "1.1",
   "description": "INVOICE VERIFICATION",
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "debugger", "unlimitedStorage"],
   "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_icon": "SAP.png",
     "default_popup": "popup.html"

@@ -16,3 +16,8 @@
 # V11
 ## ADMIN:
 - Added app Workflow Application Errors
+
+# V12
+## IV:
+- Added Batch Inspector: record MM_SUPPLIER_INVOICE_MANAGE $batch traffic (via chrome.debugger) and view the latest request/response per operation
+- Batch Inspector: show the response for failed changeset operations (rolled-back changeset returns a single error part) and render responses as a collapsible/expandable JSON tree
